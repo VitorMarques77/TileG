@@ -2,9 +2,16 @@ package dev.tilegame.states;
 
 import java.awt.Graphics;
 
-public abstract class State {
+import dev.tilegame.Game;
 
+//create a abstract class State that holds everything that every state have
+public abstract class State {
 	
+	protected Game game;
+	
+	public State(Game game) {
+		this.game = game;
+	}
 	
 	public abstract void tick();
 	

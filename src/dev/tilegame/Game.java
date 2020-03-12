@@ -5,8 +5,14 @@ import java.awt.image.BufferStrategy;
 
 import dev.tilegame.display.Display;
 import dev.tilegame.gfx.Assets;
+import dev.tilegame.input.KeyManager;
+import dev.tilegame.states.GameState;
+import dev.tilegame.states.StateManager;
+import dev.tilegame.states.MainMenuState;
+import dev.tilegame.states.SettingsState;
+import dev.tilegame.states.State;
 
-//allow class to run on a thread
+//Runnable allow class to run on a thread
 public class Game implements Runnable {
 
 	private Display display;
@@ -27,20 +33,39 @@ public class Game implements Runnable {
 	// the paint brush to draw things to the canvas
 	private Graphics g;
 
-	int x = 0;
+	// States
+
+	private State gameState;
+	private State mainMenuState;
+	private State settingsState;
+
+	// Input
+	private KeyManager keyManager;
 
 	public Game(String title, int width, int height) {
 		this.title = title;
 		this.width = width;
 		this.height = height;
+		keyManager = new KeyManager();
 	}
 
 	// initialize all the stuff(display, images, etc)
 	private void init() {
 		display = new Display(title, width, height);
+
+		// add to the frame, the keyListener responsible to map the inputs from the
+		// keyboard
+		display.getFrame().addKeyListener(keyManager);
+
 		// calling this initializes the Assets and load all the stuff we going to use in
 		// our game
 		Assets.init();
+
+		// initialize the State
+		gameState = new GameState(this);
+		mainMenuState = new MainMenuState(this);
+		settingsState = new SettingsState(this);
+		StateManager.setState(gameState);
 	}
 
 	@Override
@@ -102,9 +127,22 @@ public class Game implements Runnable {
 		stop();
 	}
 
+	public KeyManager getKeyManager() {
+		return keyManager;
+	}
+
 	// update all variables, positions, etc
 	private void tick() {
-		x++;
+
+		// call the tick method from keyManager that is going to check
+		// if the movement keys are pressed
+		keyManager.tick();
+
+		// calls the tick method from the current state of our game
+		// we have to check if it's not null before calling the method
+		if (StateManager.getState() != null) {
+			StateManager.getState().tick();
+		}
 	}
 
 	// render or draw everything to the screen
@@ -130,7 +168,11 @@ public class Game implements Runnable {
 
 		// Draw here
 
-		g.drawImage(Assets.grass, x, 10, null);
+		// calls the render method from the current state of our game
+		// we have to check if it's not null before calling the method
+		if (StateManager.getState() != null) {
+			StateManager.getState().render(g);
+		}
 
 		// End drawing
 
