@@ -1,5 +1,6 @@
 package dev.tilegame.entities.creatures;
 
+import dev.tilegame.Handler;
 import dev.tilegame.entities.Entity;
 
 //the creature class extends entity but still not implement the abstract methods
@@ -25,8 +26,8 @@ public abstract class Creature extends Entity {
 	// generic move method
 	protected float xMove, yMove;
 
-	public Creature(float x, float y, int width, int height) {
-		super(x, y, width, height);
+	public Creature(Handler handler,float x, float y, int width, int height) {
+		super(handler, x, y, width, height);
 		health = DEFAULT_HEALTH;
 		speed = DEFAULT_SPEED;
 		yMove = 0;

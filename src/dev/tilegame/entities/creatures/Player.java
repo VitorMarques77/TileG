@@ -2,23 +2,19 @@ package dev.tilegame.entities.creatures;
 
 import java.awt.Graphics;
 
-import dev.tilegame.Game;
+import dev.tilegame.Handler;
 import dev.tilegame.gfx.Assets;
 
 //the player entity has the attributes of creature(health) and entity(position) and its a class
 //that is going to implement everything from the creature and entity
 public class Player extends Creature {
 
-	// we need a game object here to access the keymanager class
-	private Game game;
-
-	public Player(Game game, float x, float y) {
+	public Player(Handler handler, float x, float y) {
 
 		// pass through the constructor the default width and height of a creature
 		// this parameters are going to the entity constructor and going to be store in
 		// the variables width and height
-		super(x, y, DEFAULT_CREATURE_WIDTH, DEFAULT_CREATURE_HEIGHT);
-		this.game = game;
+		super(handler, x, y, DEFAULT_CREATURE_WIDTH, DEFAULT_CREATURE_HEIGHT);
 	}
 
 	// where we update the position of player
@@ -32,6 +28,9 @@ public class Player extends Creature {
 		// calling the move method from the super class (creature) will apply in the x
 		// and y variables how much they should move and the direction
 		move();
+		
+		//here we set the player entity as the entity that will be in the center of the camera
+		handler.getGameCamera().centerOnEntity(this);
 	}
 
 	private void getInput() {
@@ -44,27 +43,27 @@ public class Player extends Creature {
 
 		// moving up in the y axis means that we have to subtract from the y variable
 		// so we set the yMove to negative speed
-		if (game.getKeyManager().up) {
+		if (handler.getKeyManager().up) {
 			yMove = -speed;
 		}
 
 		// moving down in the y axis means that we have to add the value in the y
 		// variable
 		// so we set the yMove to positive speed
-		if (game.getKeyManager().down) {
+		if (handler.getKeyManager().down) {
 			yMove = speed;
 		}
 
 		// moving left in the x axis means that we have to subtract from the x variable
 		// so we set the xMove to negative speed
-		if (game.getKeyManager().left) {
+		if (handler.getKeyManager().left) {
 			xMove = -speed;
 		}
 
 		// moving right in the x axis means that we have to add the value in the x
 		// variable
 		// so we set the xMove to positive speed
-		if (game.getKeyManager().right) {
+		if (handler.getKeyManager().right) {
 			xMove = speed;
 		}
 	}
@@ -75,7 +74,8 @@ public class Player extends Creature {
 
 		// we can draw an image specifying the width and height we want
 		// to draw on the screen
-		g.drawImage(Assets.player, (int) x, (int) y, width, height, null);
+		g.drawImage(Assets.player, (int) (x - handler.getGameCamera().getxOffset()),
+				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 	}
 
 }

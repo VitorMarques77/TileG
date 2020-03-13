@@ -2,9 +2,13 @@ package dev.tilegame.entities;
 
 import java.awt.Graphics;
 
+import dev.tilegame.Handler;
+
 //this is a superclass that holds everything that all other entities have
 public abstract class Entity {
 
+	protected Handler handler;
+	
 	//position of the entity on the screen
 	protected float x, y;
 	
@@ -12,7 +16,8 @@ public abstract class Entity {
 	protected int width, height;
 	
 	//initialize the variables when instantiate the class
-	public Entity(float x, float y, int width, int height) {
+	public Entity(Handler handler, float x, float y, int width, int height) {
+		this.handler = handler;
 		this.x = x;
 		this.y = y;
 		this.width = width;

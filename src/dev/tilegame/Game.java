@@ -5,19 +5,20 @@ import java.awt.image.BufferStrategy;
 
 import dev.tilegame.display.Display;
 import dev.tilegame.gfx.Assets;
+import dev.tilegame.gfx.GameCamera;
 import dev.tilegame.input.KeyManager;
 import dev.tilegame.states.GameState;
-import dev.tilegame.states.StateManager;
 import dev.tilegame.states.MainMenuState;
 import dev.tilegame.states.SettingsState;
 import dev.tilegame.states.State;
+import dev.tilegame.states.StateManager;
 
 //Runnable allow class to run on a thread
 public class Game implements Runnable {
 
 	private Display display;
 
-	public int width, height;
+	private int width, height;
 
 	private Thread thread;
 
@@ -42,6 +43,12 @@ public class Game implements Runnable {
 	// Input
 	private KeyManager keyManager;
 
+	// Camera
+	private GameCamera gameCamera;
+	
+	//Handler
+	private Handler handler;
+	
 	public Game(String title, int width, int height) {
 		this.title = title;
 		this.width = width;
@@ -60,11 +67,15 @@ public class Game implements Runnable {
 		// calling this initializes the Assets and load all the stuff we going to use in
 		// our game
 		Assets.init();
+		
+		gameCamera = new GameCamera(this, 0, 0);
+		
+		handler = new Handler(this);
 
 		// initialize the State
-		gameState = new GameState(this);
-		mainMenuState = new MainMenuState(this);
-		settingsState = new SettingsState(this);
+		gameState = new GameState(handler);
+		mainMenuState = new MainMenuState(handler);
+		settingsState = new SettingsState(handler);
 		StateManager.setState(gameState);
 	}
 
@@ -129,6 +140,18 @@ public class Game implements Runnable {
 
 	public KeyManager getKeyManager() {
 		return keyManager;
+	}
+	
+	public GameCamera getGameCamera() {
+		return gameCamera;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 	// update all variables, positions, etc

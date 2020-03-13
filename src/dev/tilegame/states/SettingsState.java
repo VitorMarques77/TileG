@@ -2,12 +2,12 @@ package dev.tilegame.states;
 
 import java.awt.Graphics;
 
-import dev.tilegame.Game;
+import dev.tilegame.Handler;
 
 public class SettingsState extends State{
 
-	public SettingsState(Game game) {
-		super(game);
+	public SettingsState(Handler handler) {
+		super(handler);
 	}
 	
 	@Override
