@@ -1,5 +1,6 @@
 package dev.tilegame.entities.creatures;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import dev.tilegame.Handler;
@@ -15,6 +16,11 @@ public class Player extends Creature {
 		// this parameters are going to the entity constructor and going to be store in
 		// the variables width and height
 		super(handler, x, y, DEFAULT_CREATURE_WIDTH, DEFAULT_CREATURE_HEIGHT);
+
+		bounds.x = 22;
+		bounds.y = 30;
+		bounds.width = 19;
+		bounds.height = 33;
 	}
 
 	// where we update the position of player
@@ -28,8 +34,9 @@ public class Player extends Creature {
 		// calling the move method from the super class (creature) will apply in the x
 		// and y variables how much they should move and the direction
 		move();
-		
-		//here we set the player entity as the entity that will be in the center of the camera
+
+		// here we set the player entity as the entity that will be in the center of the
+		// camera
 		handler.getGameCamera().centerOnEntity(this);
 	}
 
@@ -76,6 +83,14 @@ public class Player extends Creature {
 		// to draw on the screen
 		g.drawImage(Assets.player, (int) (x - handler.getGameCamera().getxOffset()),
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
+
+		// here we fill the collision rectangle we created accordingly to the position
+		// of the player so its visible in the screen for us to programming the
+		// collision properly
+		
+		//g.setColor(Color.RED);
+		//g.fillRect((int) (x + bounds.x - handler.getGameCamera().getxOffset()),
+				//(int) (y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width, bounds.height);
 	}
 
 }

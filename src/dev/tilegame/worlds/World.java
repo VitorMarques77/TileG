@@ -37,14 +37,24 @@ public class World {
 		// tiles that are in the screen and as we move the player around the map we
 		// render the tiles that are appearing and stop rendering the tiles that are
 		// disappearing
-		
-		//the xStart marks where we should start rendering, it's either 0 or the far right of the screen
+
+		// the xStart marks where we should start rendering, it's either 0 or the far
+		// right of the screen
 		int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILEWIDTH);
-		
-		//the xEnd marks where we should stop rendering, it's either width or the or the far left of the screen 
-		int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth()) / Tile.TILEWIDTH + 1);
+
+		// the xEnd marks where we should stop rendering, it's either width or the or
+		// the far left of the screen
+		int xEnd = (int) Math.min(width,
+				(handler.getGameCamera().getxOffset() + handler.getWidth()) / Tile.TILEWIDTH + 1);
+
+		// the yStart marks where we should start rendering, it's either 0 or the far
+		// down of the screen
 		int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILEHEIGHT);
-		int yEnd = (int) Math.min(height, (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILEHEIGHT + 1);
+
+		// the xEnd marks where we should stop rendering, it's either width or the or
+		// the far up of the screen
+		int yEnd = (int) Math.min(height,
+				(handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILEHEIGHT + 1);
 
 		for (int y = yStart; y < yEnd; y++) {
 			for (int x = xStart; x < xEnd; x++) {
@@ -59,8 +69,15 @@ public class World {
 	}
 
 	// this method takes the array of tiles and return the referenced tile that
-	// needs to be draw in a width and height
+	// needs to be draw
 	public Tile getTile(int x, int y) {
+
+		// if the player somehow get off the map, then it will return a grass tile by
+		// default
+		if (x < 0 || y < 0 || x == width || y >= height) {
+			return TileManager.grassTile;
+		}
+
 		Tile t = TileManager.tiles[worldTiles[x][y]];
 		if (t == null) {
 			return TileManager.dirtTile;

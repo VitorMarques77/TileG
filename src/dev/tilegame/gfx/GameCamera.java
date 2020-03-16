@@ -19,7 +19,7 @@ public class GameCamera {
 		this.yOffset = yOffset;
 	}
 
-	// here it's a method that will center the camera in a specifically entity
+	// a method that will center the camera in a specifically entity
 	public void centerOnEntity(Entity e) {
 		xOffset = e.getX() - game.getWidth() / 2 + e.getWidth() / 2;
 		yOffset = e.getY() - game.getHeight() / 2 + e.getHeight() / 2;
