@@ -1,14 +1,17 @@
 package dev.tilegame.entities.creatures;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import dev.tilegame.Handler;
+import dev.tilegame.gfx.Animation;
 import dev.tilegame.gfx.Assets;
 
 //the player entity has the attributes of creature(health) and entity(position) and its a class
 //that is going to implement everything from the creature and entity
 public class Player extends Creature {
+
+	private Animation animDown, animUp, animRight, animLeft;
 
 	public Player(Handler handler, float x, float y) {
 
@@ -21,11 +24,27 @@ public class Player extends Creature {
 		bounds.y = 30;
 		bounds.width = 19;
 		bounds.height = 33;
+
+		// Animations
+
+		// here we define the 
+		animDown = new Animation(500, Assets.player_down);
+		animUp = new Animation(500, Assets.player_up);
+		animRight = new Animation(500, Assets.player_right);
+		animLeft = new Animation(500, Assets.player_left);
 	}
 
 	// where we update the position of player
 	@Override
 	public void tick() {
+		// Animations
+
+		animDown.tick();
+		animUp.tick();
+		animRight.tick();
+		animLeft.tick();
+
+		// Movements
 
 		// calling the input method first are going to set the direction where the
 		// player should move and the speed
@@ -36,7 +55,7 @@ public class Player extends Creature {
 		move();
 
 		// here we set the player entity as the entity that will be in the center of the
-		// camera
+		// camera and call it in every tick of the game
 		handler.getGameCamera().centerOnEntity(this);
 	}
 
@@ -81,16 +100,32 @@ public class Player extends Creature {
 
 		// we can draw an image specifying the width and height we want
 		// to draw on the screen
-		g.drawImage(Assets.player, (int) (x - handler.getGameCamera().getxOffset()),
+		g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()),
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 
 		// here we fill the collision rectangle we created accordingly to the position
 		// of the player so its visible in the screen for us to programming the
 		// collision properly
-		
-		//g.setColor(Color.RED);
-		//g.fillRect((int) (x + bounds.x - handler.getGameCamera().getxOffset()),
-				//(int) (y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width, bounds.height);
+
+		// g.setColor(Color.RED);
+		// g.fillRect((int) (x + bounds.x - handler.getGameCamera().getxOffset()),
+		// (int) (y + bounds.y - handler.getGameCamera().getyOffset()), bounds.width,
+		// bounds.height);
+	}
+	
+	private BufferedImage getCurrentAnimationFrame() {
+		if (xMove < 0) {
+			return animLeft.getCurrentFrame();
+		}
+		else if (xMove > 0) {
+			return animRight.getCurrentFrame();
+		}
+		else if (yMove < 0) {
+			return animUp.getCurrentFrame();
+		}
+		else {
+			return animDown.getCurrentFrame();
+		}
 	}
 
 }

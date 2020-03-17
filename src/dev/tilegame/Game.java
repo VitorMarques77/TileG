@@ -68,10 +68,10 @@ public class Game implements Runnable {
 		// our game
 		Assets.init();
 		
-		gameCamera = new GameCamera(this, 0, 0);
-		
 		handler = new Handler(this);
-
+		
+		gameCamera = new GameCamera(handler, 0, 0);
+		
 		// initialize the State
 		gameState = new GameState(handler);
 		mainMenuState = new MainMenuState(handler);
